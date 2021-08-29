@@ -1,4 +1,3 @@
-
 use std::ops::{Add, Mul, Div, Sub };
 
 pub struct Vec3 {
@@ -12,11 +11,13 @@ impl Vec3 {
         Vec3 { x, y, z }
     }
 
-    fn dot(self, rhs: Vec3) -> f32 {
+    #[allow(dead_code)]
+    pub fn dot(self, rhs: Vec3) -> f32 {
         self.x * rhs.x + self.y * rhs.y + self.z + rhs.z
     }
 
-    fn cross(self, other: Vec3) -> Vec3 {
+    #[allow(dead_code)]
+    pub fn cross(self, other: Vec3) -> Vec3 {
         Vec3 {
             x: (self.y * other.z) - (self.z * other.y),
             y: (-(self.x * other.z) - (self.z * other.x)),
@@ -24,7 +25,8 @@ impl Vec3 {
         }
     }
 
-    fn make_unit_vector(mut self) {
+    #[allow(dead_code)]
+    pub fn make_unit_vector(mut self) {
         let k = 1.0 / self.length();
 
         self.x *= k;
@@ -32,11 +34,13 @@ impl Vec3 {
         self.z *= k;
     }
 
-    fn length_sq(&self) -> f32 {
+    #[allow(dead_code)]
+    pub fn length_sq(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    fn length(&self) -> f32 {
+    #[allow(dead_code)]
+    pub fn length(&self) -> f32 {
         self.length_sq().sqrt()
     }
 }
