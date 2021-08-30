@@ -2,6 +2,8 @@ use std::{fs::File, io::Write};
 mod vec3;
 mod ray;
 mod math;
+mod shapes;
+mod hitable_list;
 
 fn color(r: &ray::Ray) -> vec3::Vec3 {
     let center = vec3::Vec3::new(0.0, 0.0, -1.0);

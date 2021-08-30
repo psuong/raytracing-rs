@@ -13,9 +13,7 @@ impl Vec3 {
     }
 
     pub fn single(v: f32) -> Vec3 {
-        Vec3 { 
-            x: v, y: v, z: v 
-        }
+        Vec3 { x: v, y: v, z: v }
     }
 
     #[allow(dead_code)]
