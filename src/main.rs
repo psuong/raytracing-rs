@@ -1,12 +1,30 @@
 use std::{fs::File, io::Write};
 mod vec3;
 mod ray;
+mod math;
 
-fn color(r: ray::Ray) -> vec3::Vec3 {
+fn color(r: &ray::Ray) -> vec3::Vec3 {
+    let center = vec3::Vec3::new(0.0, 0.0, -1.0);
+    if hit_sphere(&center, 0.5, &r) {
+        return vec3::Vec3::new(1.0, 0.0, 0.0);
+    }
+
     let unit_direction = r.direction.unit_vector();
     let t = 0.5 * (unit_direction.y + 1.0);
 
-    vec3::Vec3::single(1.0) * (1.0 - t) + vec3::Vec3::new(0.5, 0.7, 1.0) * t
+    return vec3::Vec3::single(1.0) * (1.0 - t) + vec3::Vec3::new(0.5, 0.7, 1.0) * t
+}
+
+fn hit_sphere(center: &vec3::Vec3, radius: f32, r: &ray::Ray) -> bool {
+    let oc = r.origin - *center;
+    let a = math::dot(&r.direction, &r.direction);
+    let b = math::dot(&oc, &r.direction) * 2.0;
+
+    let r_square = radius * radius;
+    let c = math::dot(&oc, &oc) - r_square;
+    let discriminant = b * b - 4.0 * a * c;
+
+    discriminant > 0.0
 }
 
 fn main() {
@@ -30,11 +48,11 @@ fn main() {
 
             let u = i as f32 / nx as f32;
             let v = j as f32 / ny as f32;
-
+            
+            // Interpolate and casta ray to each pixel
             let r = ray::Ray::new(&origin, &(lower_left_corner + horizontal * u + vertical * v));
-            // let color = vec3::Vec3::new(i as f32 / nx as f32, j as f32 / ny as f32, 0.2);
 
-            let color = color(r);
+            let color = color(&r);
             let ir : i32 = (255.99 * color.x) as i32;
             let ig : i32 = (255.99 * color.y) as i32;
             let ib : i32 = (255.99 * color.z) as i32;

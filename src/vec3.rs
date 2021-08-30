@@ -20,7 +20,7 @@ impl Vec3 {
 
     #[allow(dead_code)]
     pub fn dot(self, rhs: Vec3) -> f32 {
-        self.x * rhs.x + self.y * rhs.y + self.z + rhs.z
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
     }
 
     #[allow(dead_code)]
