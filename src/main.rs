@@ -20,6 +20,10 @@ fn color(r: &ray::Ray) -> vec3::Vec3 {
     return vec3::Vec3::single(1.0) * (1.0 - t) + vec3::Vec3::new(0.5, 0.7, 1.0) * t
 }
 
+fn color_2(ray: &ray::Ray, world: &mut shapes::Hitable) -> vec3::Vec3 {
+    todo!("You done fucked up in Rust here")
+}
+
 fn hit_sphere(center: &vec3::Vec3, radius: f32, r: &ray::Ray) -> f32 {
     let oc = r.origin - *center;
     let a = math::dot(&r.direction, &r.direction);
