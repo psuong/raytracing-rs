@@ -20,12 +20,12 @@ impl Vec3 {
 
     #[allow(dead_code)]
     pub fn dot(self, rhs: Vec3) -> f32 {
-        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
+        return self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
     }
 
     #[allow(dead_code)]
     pub fn cross(self, other: Vec3) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: (self.y * other.z) - (self.z * other.y),
             y: (-(self.x * other.z) - (self.z * other.x)),
             z: (self.x * other.y) - (self.y * other.x)
@@ -42,7 +42,7 @@ impl Vec3 {
     }
 
     pub fn unit_vector(&self) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: self.x / self.length(),
             y: self.y / self.length(),
             z: self.z / self.length()
@@ -51,19 +51,19 @@ impl Vec3 {
 
     #[allow(dead_code)]
     pub fn length_sq(&self) -> f32 {
-        self.x * self.x + self.y * self.y + self.z * self.z
+        return self.x * self.x + self.y * self.y + self.z * self.z
     }
 
     #[allow(dead_code)]
     pub fn length(&self) -> f32 {
-        self.length_sq().sqrt()
+        return self.length_sq().sqrt()
     }
 }
 
 impl Add for Vec3 {
     type Output = Vec3;
     fn add(self, other: Vec3) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: self.x + other.x,
             y: self.y + other.y,
             z: self.z + other.z
@@ -74,7 +74,7 @@ impl Add for Vec3 {
 impl Sub for Vec3 {
     type Output = Vec3;
     fn sub(self, other: Vec3) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z
@@ -85,7 +85,7 @@ impl Sub for Vec3 {
 impl Mul<Vec3> for Vec3 {
     type Output = Vec3;
     fn mul(self, other: Vec3) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: self.x * other.x,
             y: self.y * other.y,
             z: self.z * other.z
@@ -97,7 +97,7 @@ impl Mul<f32> for Vec3 {
     type Output = Vec3;
 
     fn mul(self, other: f32) -> Vec3 {
-        Vec3 {
+        return Vec3 {
             x: self.x * other,
             y: self.y * other,
             z: self.z * other
@@ -108,7 +108,7 @@ impl Mul<f32> for Vec3 {
 impl Div<Vec3> for Vec3 {
     type Output = Vec3;
     fn div(self, rhs: Self) -> Self::Output {
-        Vec3 {
+        return Vec3 {
             x: self.x / rhs.x,
             y: self.y / rhs.y,
             z: self.z / rhs.z
@@ -119,7 +119,7 @@ impl Div<Vec3> for Vec3 {
 impl Div<f32> for Vec3 {
     type Output = Vec3;
     fn div(self, rhs: f32) -> Self::Output {
-        Vec3 {
+        return Vec3 {
             x: self.x / rhs,
             y: self.y / rhs,
             z: self.z / rhs
