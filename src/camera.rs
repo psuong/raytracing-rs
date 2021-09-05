@@ -13,7 +13,7 @@ impl Camera {
 
     pub fn new() -> Camera {
         return Camera {
-            origin : Vec3::single(0.0),
+            origin : Vec3::from_uniform_value(0.0),
             lower_left_corner : Vec3::new(-2.0, -1.0, -1.0),
             vertical : Vec3::new(0.0, 2.0, 0.0),
             horizontal : Vec3::new(4.0, 0.0, 0.0)

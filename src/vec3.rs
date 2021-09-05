@@ -12,7 +12,7 @@ impl Vec3 {
         Vec3 { x, y, z }
     }
 
-    pub fn single(v: f32) -> Vec3 {
+    pub fn from_uniform_value(v: f32) -> Vec3 {
         Vec3 { x: v, y: v, z: v }
     }
 

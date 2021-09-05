@@ -23,8 +23,8 @@ impl HitRecord {
     pub fn default() -> HitRecord {
         HitRecord {
             t: 0.0,
-            p: Vec3::single(0.0),
-            normal: Vec3::single(0.0)
+            p: Vec3::from_uniform_value(0.0),
+            normal: Vec3::from_uniform_value(0.0)
         }
     }
 }
