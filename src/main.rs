@@ -55,7 +55,7 @@ fn color<T: shapes::Hitable + Copy> (
     world: &HitableList<T>) -> Vec3 {
     let mut rec = HitRecord::default();
 
-    if hitable_list::hit(&world.list, &ray, 0.0, f32::MAX, &mut rec) {
+    if hitable_list::hit(&world.list, &ray, 0.001, f32::MAX, &mut rec) {
         let target = rec.p + rec.normal + random_in_unit_sphere();
         let new_ray = Ray::new(&rec.p, &(target - rec.p));
 
@@ -106,6 +106,7 @@ fn main() {
             }
 
             col = col / ns;
+            col = math::sqrt(col);
 
             let ir : i32 = (255.99 * col.x) as i32;
             let ig : i32 = (255.99 * col.y) as i32;
