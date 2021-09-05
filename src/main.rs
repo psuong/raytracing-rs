@@ -5,38 +5,20 @@ mod math;
 mod shapes;
 mod hitable_list;
 
-fn color(r: &ray::Ray) -> vec3::Vec3 {
-    let center = vec3::Vec3::new(0.0, 0.0, -1.0);
+fn color<T: shapes::Hitable + Copy> (
+    ray: &ray::Ray, 
+    world: &hitable_list::HitableList<T>) -> vec3::Vec3 {
+    let mut rec = shapes::HitRecord::default();
 
-    let t = hit_sphere(&center, 0.5, &r);
-    if t > 0.0 {
-        let n = ((*r).point_at_parameter(t) - center).unit_vector();
-        return vec3::Vec3::new(n.x + 1.0, n.y + 1.0, n.z + 1.0) * 0.5;
-    }
-
-    let unit_direction = r.direction.unit_vector();
-    let t = 0.5 * (unit_direction.y + 1.0);
-
-    return vec3::Vec3::single(1.0) * (1.0 - t) + vec3::Vec3::new(0.5, 0.7, 1.0) * t
-}
-
-fn color_2(ray: &ray::Ray, world: &mut shapes::Hitable) -> vec3::Vec3 {
-    todo!("You done fucked up in Rust here")
-}
-
-fn hit_sphere(center: &vec3::Vec3, radius: f32, r: &ray::Ray) -> f32 {
-    let oc = r.origin - *center;
-    let a = math::dot(&r.direction, &r.direction);
-    let b = math::dot(&oc, &r.direction) * 2.0;
-
-    let r_square = radius * radius;
-    let c = math::dot(&oc, &oc) - r_square;
-    let discriminant = b * b - 4.0 * a * c;
-
-    if discriminant < 0.0 {
-        return -1.0
+    if hitable_list::hit(&world.list, &ray, 0.0, f32::MAX, &mut rec) {
+        return vec3::Vec3::new(
+            rec.normal.x + 1.0, 
+            rec.normal.y + 1.0, 
+            rec.normal.z + 1.0) * 0.5;
     } else {
-        return (-b - discriminant.sqrt()) / (2.0 * a)
+        let unit_dir = ray.direction.unit_vector();
+        let t = (unit_dir.y + 1.0) * 0.5;
+        return (vec3::Vec3::single(1.0) * (1.0 - t)) + (vec3::Vec3::new(0.5, 0.7, 1.0) * t);
     }
 }
 
@@ -45,9 +27,16 @@ fn main() {
     let ny : i32 = 100;
 
     let lower_left_corner = vec3::Vec3::new(-2.0, -1.0, -1.0);
-    let horizontal = vec3::Vec3::new(4.0, 0.0, 0.0);
-    let vertical = vec3::Vec3::new(0.0, 2.0, 0.0);
-    let origin = vec3::Vec3::single(0.0);
+    let horizontal        = vec3::Vec3::new(4.0, 0.0, 0.0);
+    let vertical          = vec3::Vec3::new(0.0, 2.0, 0.0);
+    let origin            = vec3::Vec3::single(0.0);
+
+    let spheres = vec![
+        shapes::Sphere::new(vec3::Vec3::new(0.0, 0.0, -1.0), 0.5),
+        shapes::Sphere::new(vec3::Vec3::new(0.0, -100.5, -1.0), 100.0)
+    ];
+
+    let world = hitable_list::HitableList::from_list(spheres);
 
     let mut output = File::create("image.ppm").expect("Unable to create file");
     let ppm_header = format!("P3\n{} {}\n255\n", nx, ny);
@@ -65,7 +54,10 @@ fn main() {
             // Interpolate and casta ray to each pixel
             let r = ray::Ray::new(&origin, &(lower_left_corner + horizontal * u + vertical * v));
 
-            let color = color(&r);
+            let _p = r.point_at_parameter(2.0);
+            let color = color(&r, &world);
+
+            // let color = color(&r);
             let ir : i32 = (255.99 * color.x) as i32;
             let ig : i32 = (255.99 * color.y) as i32;
             let ib : i32 = (255.99 * color.z) as i32;

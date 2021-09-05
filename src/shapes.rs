@@ -36,31 +36,30 @@ impl Sphere {
 }
 
 impl Hitable for Sphere {
-    fn hit(self, r: &Ray, t_min: f32, t_max: f32, hit_record: &mut HitRecord) -> bool {
+    fn hit(self, r: &Ray, t_min: f32, t_max: f32, rec: &mut HitRecord) -> bool {
         let oc = r.origin - self.center;
 
-        let a = math::dot(&r.direction, &r.direction);
-        let b = math::dot(&oc, &r.direction) * 2.0;
-    
-        let r_square = self.radius * self.radius;
-        let c = math::dot(&oc, &oc) - r_square;
-        let discriminant = b * b - 4.0 * a * c;
+        let a = math::dot(r.direction, r.direction);
+        let b = math::dot(oc, r.direction) * 2.0;
+        let c = math::dot(oc, oc) - self.radius * self.radius;
+
+        let discriminant = b * b - a * c;
 
         if discriminant > 0.0 {
-            let temp = (-b - discriminant.sqrt()) / (2.0 * a);
+            let mut temp = (-b - (b * b - a * c).sqrt()) / a;
             if temp < t_max && temp > t_min {
-                hit_record.p = r.point_at_parameter(temp);
-                hit_record.t = temp;
-                hit_record.normal = (hit_record.p - self.center) / self.radius;
+                rec.p = r.point_at_parameter(temp);
+                rec.t = temp;
+                rec.normal = (rec.p - self.center) / self.radius;
                 return true;
             }
 
-            let temp = (-b + (b * b - a * c).sqrt()) / a;
+            temp = (-b + (b * b - a * c).sqrt()) / a;
 
             if temp < t_max && temp > t_min {
-                hit_record.p = r.point_at_parameter(temp);
-                hit_record.t = temp;
-                hit_record.normal = (hit_record.p - self.center) / self.radius;
+                rec.p = r.point_at_parameter(temp);
+                rec.t = temp;
+                rec.normal = (rec.p - self.center) / self.radius;
                 return true;
             }
         }
