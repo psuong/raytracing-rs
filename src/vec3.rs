@@ -135,3 +135,14 @@ impl Mul<Vec3> for f32 {
         }
     }
 }
+
+impl Div<i32> for Vec3 {
+    type Output = Vec3;
+    fn div(self, rhs: i32) -> Self::Output {
+        return Vec3 {
+            x: self.x / rhs as f32,
+            y: self.y / rhs as f32,
+            z: self.z / rhs as f32
+        }
+    }
+}

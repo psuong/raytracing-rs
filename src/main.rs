@@ -1,9 +1,11 @@
 use std::{fs::File, io::Write};
+use rand::prelude::*;
 mod vec3;
 mod ray;
 mod math;
 mod shapes;
 mod hitable_list;
+mod camera;
 
 fn color<T: shapes::Hitable + Copy> (
     ray: &ray::Ray, 
@@ -34,13 +36,9 @@ fn color<T: shapes::Hitable + Copy> (
 }
 
 fn main() {
-    let nx : i32 = 200;
-    let ny : i32 = 100;
-
-    let lower_left_corner = vec3::Vec3::new(-2.0, -1.0, -1.0);
-    let horizontal        = vec3::Vec3::new(4.0, 0.0, 0.0);
-    let vertical          = vec3::Vec3::new(0.0, 2.0, 0.0);
-    let origin            = vec3::Vec3::single(0.0);
+    let nx : i32 = 400; // width
+    let ny : i32 = 200; // height
+    let ns : i32 = 100; // AA sampling
 
     let spheres = vec![
         shapes::Sphere::new(vec3::Vec3::new(0.0, 0.0, -1.0), 0.5),
@@ -54,31 +52,38 @@ fn main() {
 
     output.write_all(ppm_header.as_bytes()).expect("Unable to write to file");
 
+    let camera = camera::Camera::new();
+
     let mut j = ny - 1;
     while j >= 0 {
         let mut i = 0;
         while i < nx {
+            let mut col = vec3::Vec3::single(0.0);
 
-            let u = i as f32 / nx as f32;
-            let v = j as f32 / ny as f32;
-            
-            // Interpolate and casta ray to each pixel
-            let r = ray::Ray::new(&origin, &(lower_left_corner + horizontal * u + vertical * v));
+            let mut s = 0;
+            while s < ns {
+                let random_value : i32 = rand::thread_rng().gen_range(0..100);
+                let normalized_rand = (random_value as f32) / 100.0;
 
-            let _p = r.point_at_parameter(2.0);
-            let color = color(&r, &world);
+                let u = ((i as f32) + normalized_rand) / nx as f32;
+                let v = ((j as f32) + normalized_rand) / ny as f32;
 
-            // let color = color(&r);
-            let ir : i32 = (255.99 * color.x) as i32;
-            let ig : i32 = (255.99 * color.y) as i32;
-            let ib : i32 = (255.99 * color.z) as i32;
-
-            let color_row = format!("{} {} {}\n", ir, ig, ib);
-
-            if ir < 0 || ig < 0 || ib < 0 {
-                println!("{}", color_row);
+                let r = camera.get_ray(u, v);
+                let _p = r.point_at_parameter(2.0); // Not really sure what I'm doing here
+                col = col + color(&r, &world);
+                s = s + 1;
             }
 
+            col = col / ns;
+
+            // Interpolate and cast a ray to each pixel
+            // let r = ray::Ray::new(&origin, &(lower_left_corner + horizontal * u + vertical * v));
+            
+            let ir : i32 = (255.99 * col.x) as i32;
+            let ig : i32 = (255.99 * col.y) as i32;
+            let ib : i32 = (255.99 * col.z) as i32;
+
+            let color_row = format!("{} {} {}\n", ir, ig, ib);
             output.write_all(color_row.as_bytes()).expect("Unable to write color");
             i = i + 1;
         }
