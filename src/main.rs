@@ -11,14 +11,25 @@ fn color<T: shapes::Hitable + Copy> (
     let mut rec = shapes::HitRecord::default();
 
     if hitable_list::hit(&world.list, &ray, 0.0, f32::MAX, &mut rec) {
-        return vec3::Vec3::new(
-            rec.normal.x + 1.0, 
-            rec.normal.y + 1.0, 
-            rec.normal.z + 1.0) * 0.5;
+        let ret_val = 0.5 * (vec3::Vec3::new(
+            rec.normal.x, 
+            rec.normal.y, 
+            rec.normal.z) + vec3::Vec3::single(1.0));
+
+        if ret_val.x < 0.0 {
+            println!("Normal -> {}", ret_val.x);
+        }
+        return ret_val;
     } else {
         let unit_dir = ray.direction.unit_vector();
         let t = (unit_dir.y + 1.0) * 0.5;
-        return (vec3::Vec3::single(1.0) * (1.0 - t)) + (vec3::Vec3::new(0.5, 0.7, 1.0) * t);
+        let ret_val = (1.0 - t) * vec3::Vec3::single(1.0) + t * vec3::Vec3::new(0.5, 0.7, 1.0);
+
+        if ret_val.x < 0.0 {
+            println!("Else -> {}", ret_val.x);
+        }
+
+        return ret_val;
     }
 }
 
@@ -63,6 +74,11 @@ fn main() {
             let ib : i32 = (255.99 * color.z) as i32;
 
             let color_row = format!("{} {} {}\n", ir, ig, ib);
+
+            if ir < 0 || ig < 0 || ib < 0 {
+                println!("{}", color_row);
+            }
+
             output.write_all(color_row.as_bytes()).expect("Unable to write color");
             i = i + 1;
         }

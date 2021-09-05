@@ -40,7 +40,7 @@ impl Hitable for Sphere {
         let oc = r.origin - self.center;
 
         let a = math::dot(r.direction, r.direction);
-        let b = math::dot(oc, r.direction) * 2.0;
+        let b = math::dot(oc, r.direction);
         let c = math::dot(oc, oc) - self.radius * self.radius;
 
         let discriminant = b * b - a * c;

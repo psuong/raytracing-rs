@@ -14,7 +14,9 @@ impl<T: Hitable + Copy> HitableList<T> {
     }
 }
 
-pub fn hit<T: Hitable + Copy>(borrowed_list: &Vec<T>, r: &Ray, t_min: f32, t_max: f32, hit_record: &mut HitRecord) -> bool {
+pub fn hit<T: Hitable + Copy>(
+    borrowed_list: &Vec<T>, r: &Ray, t_min: f32, t_max: f32, rec: &mut HitRecord) -> bool {
+
     let mut temp_rec = HitRecord::default();
     let mut hit_anything = false;
     let mut closest = t_max.clone();
@@ -23,7 +25,7 @@ pub fn hit<T: Hitable + Copy>(borrowed_list: &Vec<T>, r: &Ray, t_min: f32, t_max
         if (*current).hit(&r, t_min, closest, &mut temp_rec) {
             hit_anything = true;
             closest = temp_rec.t.clone();
-            *hit_record = temp_rec;
+            *rec = temp_rec;
         }
     }
 
