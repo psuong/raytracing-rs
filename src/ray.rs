@@ -8,11 +8,18 @@ pub struct Ray {
 
 impl Ray {
     
+    pub fn default() -> Ray {
+        return Ray {
+            origin : Vec3::from_uniform_value(0.0),
+            direction : Vec3::from_uniform_value(0.0)
+        };
+    }
+    
     pub fn new(a: &Vec3, b: &Vec3) -> Ray {
-        Ray {
+        return Ray {
             origin: a.clone(),
             direction: b.clone()
-        }
+        };
     }
 
     #[allow(dead_code)]

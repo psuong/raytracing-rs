@@ -7,3 +7,7 @@ pub fn dot(lhs: Vec3, rhs: Vec3) -> f32 {
 pub fn sqrt(value: Vec3) -> Vec3 {
     return Vec3::new(value.x.sqrt(), value.y.sqrt(), value.z.sqrt());
 }
+
+pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
+    return v - (2.0 * dot(v, n) * n);
+}
