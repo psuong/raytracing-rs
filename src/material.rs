@@ -35,11 +35,15 @@ impl Physics for Lambertian {
         scattered: &mut Ray) -> bool {
 
         let target = rec.p + rec.normal + random_in_unit_sphere();
-        *scattered = Ray::new(&rec.p, &(target - rec.p));
-        *attenuation = self.albedo;
+        let dir = target - rec.p;
+
+        // println!("Target: {}, Dir: {}", target, dir);
+        *scattered = Ray::new(&rec.p, &dir);
+        *attenuation = self.albedo.clone();
         return true;
     }
 }
+
 
 #[derive(Clone, Copy)]
 pub struct Metal {
@@ -62,10 +66,9 @@ impl Physics for Metal {
         attenuation: &mut Vec3, 
         scattered: &mut Ray) -> bool {
         
-        let lhs = ray.direction.unit_vector();
-        let reflected = reflect(lhs, rec.normal);
+        let reflected = reflect(ray.direction, rec.normal);
         *scattered = Ray::new(&rec.p, &reflected);
-        *attenuation = self.albedo;
-        return dot(scattered.direction, rec.normal) > 0.0;
+        *attenuation = self.albedo.clone();
+        return (dot(scattered.direction, rec.normal)) > 0.0;
     }
 }

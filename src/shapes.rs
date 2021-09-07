@@ -45,6 +45,15 @@ impl HitRecord {
     }
 }
 
+impl std::fmt::Display for HitRecord {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "(t: {}, Point: {}, {}, {}, Normal: {}, {}, {})", 
+            self.t, 
+            self.p.x, self.p.y, self.p.z, 
+            self.normal.x, self.normal.y, self.normal.z)
+    }
+}
+
 impl Sphere {
     pub fn new(cent: Vec3, r: f32) -> Sphere {
         return Sphere { 

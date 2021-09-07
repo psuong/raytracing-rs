@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul, Div, Sub };
+use std::{fmt::{self, Display, Result}, ops::{Add, Mul, Div, Sub }};
 
 #[derive(Clone, Copy)]
 pub struct Vec3 {
@@ -8,12 +8,16 @@ pub struct Vec3 {
 }
 
 impl Vec3 {
+    pub fn zero() -> Vec3 {
+        return Vec3 { x: 0.0, y: 0.0, z: 0.0 }
+    }
+
     pub fn new(x: f32, y: f32, z: f32) -> Vec3 {
-        Vec3 { x, y, z }
+        return Vec3 { x, y, z }
     }
 
     pub fn from_uniform_value(v: f32) -> Vec3 {
-        Vec3 { x: v, y: v, z: v }
+        return Vec3 { x: v, y: v, z: v }
     }
 
     #[allow(dead_code)]
@@ -55,6 +59,12 @@ impl Vec3 {
     #[allow(dead_code)]
     pub fn length(&self) -> f32 {
         return self.length_sq().sqrt()
+    }
+}
+
+impl Display for Vec3 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result {
+        write!(f, "(x: {}, y: {}, z: {})", self.x, self.y, self.z)
     }
 }
 

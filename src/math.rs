@@ -9,5 +9,5 @@ pub fn sqrt(value: Vec3) -> Vec3 {
 }
 
 pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
-    return v - (2.0 * dot(v, n) * n);
+    return v - 2.0 * dot(v, n) * n;
 }

@@ -16,6 +16,7 @@ impl Ray {
     }
     
     pub fn new(a: &Vec3, b: &Vec3) -> Ray {
+        // println!("origin: {}, dir: {}", a.clone(), b.clone());
         return Ray {
             origin: a.clone(),
             direction: b.clone()

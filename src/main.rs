@@ -28,23 +28,18 @@ fn color<T: shapes::Hitable + MaterialAccessor + Copy> (
         let mut scattered = Ray::default();
         let mut attenuation = Vec3::from_uniform_value(0.0);
 
-        // Okay maybe I can turn this into a function here...
-        match rec.material_type {
-            0 => { 
-                let lamb_mat : Lambertian = lambertians[rec.material_index as usize];
-                if lamb_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
-                    return attenuation * color(&lambertians, &metals, &ray, &world, depth + 1);
-                }
+        if rec.material_type == 0 {
+            let lamb_mat : Lambertian = lambertians[0];
+            if lamb_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
+                return attenuation * color(&lambertians, &metals, &scattered, &world, depth + 1);
+            } else {
                 return Vec3::from_uniform_value(0.0);
-            },
-            1 => { 
-                let metal_mat : Metal = metals[rec.material_index as usize];
-                if metal_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
-                    return attenuation * color(&lambertians, &metals, &ray, &world, depth + 1);
-                }
-                return Vec3::from_uniform_value(0.0);
-            },
-            _ => {
+            }
+        } else {
+            let metal_mat : Metal = metals[rec.material_index as usize];
+            if metal_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
+                return attenuation * color(&lambertians, &metals, &scattered, &world, depth + 1);
+            } else {
                 return Vec3::from_uniform_value(0.0);
             }
         }
@@ -61,8 +56,8 @@ fn color<T: shapes::Hitable + MaterialAccessor + Copy> (
 }
 
 fn main() {
-    let nx : i32 = 200; // width
-    let ny : i32 = 100; // height
+    let nx : i32 = 400; // width
+    let ny : i32 = 200; // height
     let ns : i32 = 100; // AA sampling
 
     let spheres = vec![
@@ -107,6 +102,7 @@ fn main() {
                 let r = camera.get_ray(u, v);
                 let _p = r.point_at_parameter(2.0); // Not really sure what I'm doing here
                 // col = col + color(&lambertians, &metals, &r, &world);
+
                 col = col + color(&lambertians, &metals, &r, &world, 0);
                 s = s + 1;
             }
