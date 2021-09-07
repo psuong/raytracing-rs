@@ -33,14 +33,14 @@ fn color<T: shapes::Hitable + MaterialAccessor + Copy> (
             if lamb_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
                 return attenuation * color(&lambertians, &metals, &scattered, &world, depth + 1);
             } else {
-                return Vec3::from_uniform_value(0.0);
+                return Vec3::zero();
             }
         } else {
             let metal_mat : Metal = metals[rec.material_index as usize];
             if metal_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
                 return attenuation * color(&lambertians, &metals, &scattered, &world, depth + 1);
             } else {
-                return Vec3::from_uniform_value(0.0);
+                return Vec3::zero();
             }
         }
 
@@ -69,12 +69,12 @@ fn main() {
 
     let lambertians = vec![
         Lambertian::with_albedo(Vec3::new(0.8, 0.3, 0.3)),
-        Lambertian::with_albedo(Vec3::new(0.8, 0.8, 0.8))
+        Lambertian::with_albedo(Vec3::from_uniform_value(0.8))
     ];
 
     let metals = vec![
-        Metal::with_albedo(Vec3::new(0.8, 0.6, 0.2)),
-        Metal::with_albedo(Vec3::new(0.8, 0.8, 0.8)),
+        Metal::with_properties(Vec3::new(0.8, 0.6, 0.2), 0.3),
+        Metal::with_properties(Vec3::from_uniform_value(0.8), 1.0),
     ];
 
     let world = HitableList::from_list(spheres);

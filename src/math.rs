@@ -11,3 +11,16 @@ pub fn sqrt(value: Vec3) -> Vec3 {
 pub fn reflect(v: Vec3, n: Vec3) -> Vec3 {
     return v - 2.0 * dot(v, n) * n;
 }
+
+pub fn refract(v: Vec3, n: Vec3, ni_over_t: f32, refracted: &mut Vec3) -> bool {
+    let uv = v.unit_vector();
+    let dt = dot(uv, n);
+
+    let discriminant = 1.0 - ni_over_t * ni_over_t * (1.0 - dt * dt);
+    if discriminant > 0.0 {
+        *refracted = ni_over_t * (uv - n * dt) - n * discriminant.sqrt();
+        return true;
+    }
+
+    return false;
+}

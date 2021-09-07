@@ -47,13 +47,15 @@ impl Physics for Lambertian {
 
 #[derive(Clone, Copy)]
 pub struct Metal {
-    albedo: Vec3
+    albedo: Vec3,
+    fuzz: f32
 }
 
 impl Metal {
-    pub fn with_albedo(albedo_value: Vec3) -> Metal {
+    pub fn with_properties(albedo_value: Vec3, f: f32) -> Metal {
         return Metal {
-            albedo: albedo_value
+            albedo: albedo_value,
+            fuzz: f
         }
     }
 }
@@ -67,7 +69,7 @@ impl Physics for Metal {
         scattered: &mut Ray) -> bool {
         
         let reflected = reflect(ray.direction, rec.normal);
-        *scattered = Ray::new(&rec.p, &reflected);
+        *scattered = Ray::new(&rec.p, &(reflected + self.fuzz * random_in_unit_sphere()));
         *attenuation = self.albedo.clone();
         return (dot(scattered.direction, rec.normal)) > 0.0;
     }
