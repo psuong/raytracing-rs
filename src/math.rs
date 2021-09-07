@@ -24,3 +24,9 @@ pub fn refract(v: Vec3, n: Vec3, ni_over_t: f32, refracted: &mut Vec3) -> bool {
 
     return false;
 }
+
+pub fn schlick(cos: f32, ref_idx: f32) -> f32 {
+    let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+    r0 = r0 * r0;
+    return r0 + (1.0 - r0) * (1.0 - cos).powf(5.0);
+}

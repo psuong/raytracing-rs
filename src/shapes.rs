@@ -37,12 +37,6 @@ impl HitRecord {
             material_type: -1
         }
     }
-
-    pub fn with_material(mut self, mat_type: i32, index: i32) -> HitRecord {
-        self.material_index = index;
-        self.material_type = mat_type;
-        return self;
-    }
 }
 
 impl std::fmt::Display for HitRecord {
