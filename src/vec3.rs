@@ -44,14 +44,10 @@ impl Vec3 {
     }
 
     pub fn unit_vector(&self) -> Vec3 {
-        return Vec3 {
-            x: self.x / self.length(),
-            y: self.y / self.length(),
-            z: self.z / self.length()
-        }
+        let length = self.length();
+        return *self / length;
     }
 
-    #[allow(dead_code)]
     pub fn length_sq(&self) -> f32 {
         return self.x * self.x + self.y * self.y + self.z * self.z
     }

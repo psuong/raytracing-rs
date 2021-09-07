@@ -82,7 +82,7 @@ fn main() {
     ];
 
     let metals = vec![
-        Metal::with_properties(Vec3::new(0.8, 0.6, 0.2), 1.0),
+        Metal::with_properties(Vec3::new(0.8, 0.6, 0.2), 0.3),
     ];
 
     let dielectric = vec![
@@ -96,7 +96,12 @@ fn main() {
 
     output.write_all(ppm_header.as_bytes()).expect("Unable to write to file");
 
-    let camera = Camera::new();
+    let camera = Camera::perspective(
+        Vec3::new(-2.0, 2.0, 1.0), 
+        Vec3::new(0.0, 0.0, 1.0),
+        Vec3::new(0.0, 1.0, 0.0), 
+        90.0, 
+        nx as f32 / ny as f32);
 
     let mut j = ny - 1;
     while j >= 0 {
