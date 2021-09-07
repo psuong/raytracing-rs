@@ -30,7 +30,7 @@ fn color<T: shapes::Hitable + MaterialAccessor + Copy> (
         let mut attenuation = Vec3::from_uniform_value(0.0);
 
         if rec.material_type == 0 {
-            let lamb_mat : Lambertian = lambertians[0];
+            let lamb_mat : Lambertian = lambertians[rec.material_index as usize];
             if lamb_mat.scatter(&ray, &rec, &mut attenuation, &mut scattered) && depth < 50 {
                 return attenuation * color(&lambertians, &metals, &dielectics, &scattered, &world, depth + 1);
             } else {
@@ -72,7 +72,8 @@ fn main() {
         Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5).with_material(0, 0),
         Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).with_material(0, 1),
         Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5).with_material(1, 0),
-        Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5).with_material(2, 0)
+        Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5).with_material(2, 0),
+        Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45).with_material(2, 0)
     ];
 
     let lambertians = vec![
@@ -81,7 +82,7 @@ fn main() {
     ];
 
     let metals = vec![
-        Metal::with_properties(Vec3::new(0.8, 0.6, 0.2), 0.3),
+        Metal::with_properties(Vec3::new(0.8, 0.6, 0.2), 1.0),
     ];
 
     let dielectric = vec![
@@ -112,8 +113,6 @@ fn main() {
 
                 let r = camera.get_ray(u, v);
                 let _p = r.point_at_parameter(2.0); // Not really sure what I'm doing here
-                // col = col + color(&lambertians, &metals, &r, &world);
-
                 col = col + color(&lambertians, &metals, &dielectric, &r, &world, 0);
                 s = s + 1;
             }
