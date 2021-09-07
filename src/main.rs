@@ -64,16 +64,16 @@ fn color<T: shapes::Hitable + MaterialAccessor + Copy> (
 }
 
 fn main() {
-    let nx : i32 = 400; // width
-    let ny : i32 = 200; // height
+    let nx : i32 = 800; // width
+    let ny : i32 = 400; // height
     let ns : i32 = 100; // AA sampling
 
     let spheres = vec![
-        Sphere::new(Vec3::new(0.0, 0.0, -1.0), 0.5).with_material(0, 0),
-        Sphere::new(Vec3::new(0.0, -100.5, -1.0), 100.0).with_material(0, 1),
-        Sphere::new(Vec3::new(1.0, 0.0, -1.0), 0.5).with_material(1, 0),
-        Sphere::new(Vec3::new(-1.0, 0.0, -1.0), 0.5).with_material(2, 0),
-        Sphere::new(Vec3::new(-1.0, 0.0, -1.0), -0.45).with_material(2, 0)
+        Sphere::new(Vec3::new(0.0, 0.0, 1.0), 0.5).with_material(0, 0),
+        Sphere::new(Vec3::new(0.0, -100.5, 1.0), 100.0).with_material(0, 1),
+        Sphere::new(Vec3::new(1.0, 0.0, 1.5), 0.5).with_material(1, 0),
+        Sphere::new(Vec3::new(-1.0, 0.0, 0.5), 0.5).with_material(2, 0),
+        Sphere::new(Vec3::new(-1.0, 0.0, 0.5), -0.45).with_material(2, 0)
     ];
 
     let lambertians = vec![
