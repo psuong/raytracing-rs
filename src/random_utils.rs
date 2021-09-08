@@ -1,5 +1,5 @@
 use rand::prelude::*;
-use crate::vec3::Vec3;
+use crate::{math::dot, vec3::Vec3};
 
 /// Helper function to generate a random value between 0 and 1.
 ///
@@ -35,5 +35,13 @@ pub fn random_in_unit_sphere() -> Vec3 {
             generate_normalized_ran(100)) - Vec3::from_uniform_value(1.0);
     }
 
+    return p;
+}
+
+pub fn random_in_unit_disk() -> Vec3 {
+    let mut p = 2.0 * Vec3::new(generate_normalized_ran(100), generate_normalized_ran(100), 0.0) - Vec3::new(1.0, 1.0, 0.0);
+    while dot(p, p) >= 1.0 {
+        p = 2.0 * Vec3::new(generate_normalized_ran(100), generate_normalized_ran(100), 0.0) - Vec3::new(1.0, 1.0, 0.0);
+    }
     return p;
 }
